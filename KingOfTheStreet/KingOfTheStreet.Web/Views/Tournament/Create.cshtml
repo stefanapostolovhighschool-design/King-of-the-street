@@ -1,0 +1,61 @@
+@model Tournament
+@{ ViewData["Title"] = "New Tournament"; }
+<div class="kos-container kos-narrow">
+    <h1 class="kos-section-title">New Tournament</h1>
+    <p class="kos-section-sub">Set up the next battle for the crown.</p>
+
+    <div class="kos-card kos-pad">
+        <form asp-action="Create" method="post">
+            <div asp-validation-summary="ModelOnly" class="kos-validation"></div>
+
+            <div class="kos-field">
+                <label asp-for="Name" class="kos-label"></label>
+                <input asp-for="Name" class="kos-input" placeholder="Summer Street Slam" />
+                <span asp-validation-for="Name" class="kos-error"></span>
+            </div>
+
+            <div class="kos-field">
+                <label asp-for="Description" class="kos-label"></label>
+                <textarea asp-for="Description" class="kos-input" rows="3" placeholder="Describe the tournament..."></textarea>
+                <span asp-validation-for="Description" class="kos-error"></span>
+            </div>
+
+            <div class="kos-field">
+                <label asp-for="Location" class="kos-label"></label>
+                <input asp-for="Location" class="kos-input" placeholder="Rucker Park, NYC" />
+                <span asp-validation-for="Location" class="kos-error"></span>
+            </div>
+
+            <div class="kos-grid kos-grid-2">
+                <div class="kos-field">
+                    <label asp-for="StartDate" class="kos-label"></label>
+                    <input asp-for="StartDate" type="date" class="kos-input" />
+                    <span asp-validation-for="StartDate" class="kos-error"></span>
+                </div>
+                <div class="kos-field">
+                    <label asp-for="EndDate" class="kos-label"></label>
+                    <input asp-for="EndDate" type="date" class="kos-input" />
+                    <span asp-validation-for="EndDate" class="kos-error"></span>
+                </div>
+            </div>
+
+            <div class="kos-grid kos-grid-2">
+                <div class="kos-field">
+                    <label asp-for="MaxTeams" class="kos-label"></label>
+                    <input asp-for="MaxTeams" class="kos-input" value="8" />
+                    <span asp-validation-for="MaxTeams" class="kos-error"></span>
+                </div>
+                <div class="kos-field">
+                    <label asp-for="Status" class="kos-label"></label>
+                    <select asp-for="Status" asp-items="Html.GetEnumSelectList<TournamentStatus>()" class="kos-input"></select>
+                </div>
+            </div>
+
+            <div class="kos-flex kos-mt">
+                <button type="submit" class="kos-btn kos-btn-primary">Create Tournament</button>
+                <a class="kos-btn kos-btn-outline" asp-action="Index">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

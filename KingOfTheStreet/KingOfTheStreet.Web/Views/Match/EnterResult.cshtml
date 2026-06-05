@@ -1,0 +1,26 @@
+@model Match
+@{ ViewData["Title"] = "Enter Result"; }
+<div class="kos-container kos-narrow">
+    <h1 class="kos-section-title">Enter Match Result</h1>
+    <p class="kos-section-sub">@(Model.TeamA?.Name ?? "Team A") vs @(Model.TeamB?.Name ?? "Team B")</p>
+
+    <div class="kos-card kos-pad">
+        <form asp-action="EnterResult" method="post">
+            <input type="hidden" name="id" value="@Model.Id" />
+            <div class="kos-grid kos-grid-2">
+                <div class="kos-field">
+                    <label class="kos-label">@(Model.TeamA?.Name ?? "Team A") Score</label>
+                    <input name="scoreA" type="number" min="0" class="kos-input" value="@Model.ScoreA" />
+                </div>
+                <div class="kos-field">
+                    <label class="kos-label">@(Model.TeamB?.Name ?? "Team B") Score</label>
+                    <input name="scoreB" type="number" min="0" class="kos-input" value="@Model.ScoreB" />
+                </div>
+            </div>
+            <div class="kos-flex kos-mt">
+                <button type="submit" class="kos-btn kos-btn-primary">Save Result</button>
+                <a class="kos-btn kos-btn-outline" asp-action="Details" asp-route-id="@Model.Id">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>

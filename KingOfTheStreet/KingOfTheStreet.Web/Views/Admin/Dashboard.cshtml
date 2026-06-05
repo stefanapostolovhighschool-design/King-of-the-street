@@ -1,0 +1,58 @@
+@{
+    ViewData["Title"] = "Admin Dashboard";
+    var stats = ViewData["Stats"] as DashboardStats ?? new DashboardStats();
+    var pending = ViewData["PendingTeams"] as List<Team> ?? new List<Team>();
+}
+<div class="kos-container">
+    <h1 class="kos-section-title">Admin Dashboard</h1>
+    <p class="kos-section-sub">Run the league.</p>
+
+    <div class="kos-grid kos-grid-4">
+        <div class="kos-stat-card"><span class="kos-stat-num">@stats.TotalTournaments</span><span class="kos-stat-label">Tournaments</span></div>
+        <div class="kos-stat-card"><span class="kos-stat-num">@stats.TotalTeams</span><span class="kos-stat-label">Teams</span></div>
+        <div class="kos-stat-card"><span class="kos-stat-num">@stats.TotalPlayers</span><span class="kos-stat-label">Players</span></div>
+        <div class="kos-stat-card"><span class="kos-stat-num">@stats.UpcomingMatches</span><span class="kos-stat-label">Upcoming Matches</span></div>
+    </div>
+
+    <div class="kos-grid kos-grid-2 kos-mt">
+        <div class="kos-card kos-pad">
+            <h2 class="kos-card-title">Season Tools</h2>
+            <p class="kos-meta">Simulate every scheduled match across all tournaments at once.</p>
+            <form asp-action="SimulateSeason" method="post">
+                <button type="submit" class="kos-btn kos-btn-primary">⚡ Simulate Full Season</button>
+            </form>
+            <hr class="kos-hr" />
+            <p class="kos-meta">Total registered users: <strong>@stats.TotalUsers</strong></p>
+            <a class="kos-btn kos-btn-outline kos-btn-sm" asp-action="ManageUsers">Manage Users</a>
+        </div>
+
+        <div class="kos-card kos-pad">
+            <h2 class="kos-card-title">Teams Pending Approval (@pending.Count)</h2>
+            @if (pending.Any())
+            {
+                <div class="kos-list">
+                    @foreach (var t in pending)
+                    {
+                        <div class="kos-list-row">
+                            <span>@t.Name <small class="kos-meta">(@(t.Players?.Count ?? 0) players)</small></span>
+                            <form asp-action="ApproveTeam" method="post" style="display:inline">
+                                <input type="hidden" name="id" value="@t.Id" />
+                                <button type="submit" class="kos-btn kos-btn-primary kos-btn-sm">Approve</button>
+                            </form>
+                        </div>
+                    }
+                </div>
+            }
+            else { <p class="kos-meta">All teams are approved. 🎉</p> }
+        </div>
+    </div>
+
+    <div class="kos-card kos-pad kos-mt">
+        <h2 class="kos-card-title">Generate Bracket</h2>
+        <p class="kos-meta">Seed a tournament bracket from its approved teams.</p>
+        <form asp-action="GenerateBracket" method="post" class="kos-flex">
+            <input name="tournamentId" type="number" class="kos-input" placeholder="Tournament ID" style="max-width:180px" />
+            <button type="submit" class="kos-btn kos-btn-primary">Generate</button>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,50 @@
+@model Match
+@{
+    ViewData["Title"] = "Match Details";
+    var stats = (Model.PlayerStats ?? new List<PlayerMatchStat>()).OrderByDescending(s => s.Points).ToList();
+    var teamAStats = stats.Where(s => s.TeamId == (Model.TeamAId ?? -1)).ToList();
+    var teamBStats = stats.Where(s => s.TeamId == (Model.TeamBId ?? -1)).ToList();
+}
+<div class="kos-container">
+    <div class="kos-scorecard">
+        <div class="kos-scorecard-team">
+            <div class="kos-team-logo kos-team-logo-lg">@(Model.TeamA?.Name?.Substring(0,1) ?? "?")</div>
+            <h2>@(Model.TeamA?.Name ?? "TBD")</h2>
+        </div>
+        <div class="kos-scorecard-score">
+            <span>@Model.ScoreA : @Model.ScoreB</span>
+            <span class="kos-pill @(Model.Status == MatchStatus.Live ? "kos-pill-live" : "kos-pill-gray")">@Model.Status</span>
+        </div>
+        <div class="kos-scorecard-team">
+            <div class="kos-team-logo kos-team-logo-lg">@(Model.TeamB?.Name?.Substring(0,1) ?? "?")</div>
+            <h2>@(Model.TeamB?.Name ?? "TBD")</h2>
+        </div>
+    </div>
+
+    @if (Model.MvpPlayer != null)
+    {
+        <div class="kos-mvp-banner">🏆 Game MVP: <strong>@Model.MvpPlayer.FullName</strong></div>
+    }
+
+    @if (User.IsInRole(DbSeeder.AdminRole) && Model.Status != MatchStatus.Finished && Model.TeamAId != null && Model.TeamBId != null)
+    {
+        <form asp-action="Simulate" asp-route-id="@Model.Id" method="post" class="kos-mt">
+            <button type="submit" class="kos-btn kos-btn-primary">⚡ Simulate This Match</button>
+        </form>
+    }
+
+    @if (stats.Any())
+    {
+        <h2 class="kos-subhead">Box Score</h2>
+        <div class="kos-grid kos-grid-2">
+            @await Html.PartialAsync("_BoxScore", (Model.TeamA?.Name ?? "Team A", teamAStats))
+            @await Html.PartialAsync("_BoxScore", (Model.TeamB?.Name ?? "Team B", teamBStats))
+        </div>
+    }
+    else
+    {
+        <div class="kos-empty kos-mt">No box score yet. Simulate or enter a result to generate stats.</div>
+    }
+
+    <a class="kos-btn kos-btn-outline kos-mt" asp-action="Schedule" asp-route-tournamentId="@Model.TournamentId">← Back to Schedule</a>
+</div>

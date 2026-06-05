@@ -1,0 +1,49 @@
+@page
+@model RegisterModel
+@{ ViewData["Title"] = "Sign Up"; }
+<div class="kos-container kos-narrow">
+    <h1 class="kos-section-title">Create Account</h1>
+    <p class="kos-section-sub">Join the league. Build your team. Chase the crown.</p>
+
+    <div class="kos-card kos-pad">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="kos-validation"></div>
+
+            <div class="kos-grid kos-grid-2">
+                <div class="kos-field">
+                    <label asp-for="Input.FirstName" class="kos-label"></label>
+                    <input asp-for="Input.FirstName" class="kos-input" />
+                    <span asp-validation-for="Input.FirstName" class="kos-error"></span>
+                </div>
+                <div class="kos-field">
+                    <label asp-for="Input.LastName" class="kos-label"></label>
+                    <input asp-for="Input.LastName" class="kos-input" />
+                    <span asp-validation-for="Input.LastName" class="kos-error"></span>
+                </div>
+            </div>
+
+            <div class="kos-field">
+                <label asp-for="Input.Email" class="kos-label"></label>
+                <input asp-for="Input.Email" class="kos-input" autocomplete="username" />
+                <span asp-validation-for="Input.Email" class="kos-error"></span>
+            </div>
+
+            <div class="kos-grid kos-grid-2">
+                <div class="kos-field">
+                    <label asp-for="Input.Password" class="kos-label"></label>
+                    <input asp-for="Input.Password" class="kos-input" autocomplete="new-password" />
+                    <span asp-validation-for="Input.Password" class="kos-error"></span>
+                </div>
+                <div class="kos-field">
+                    <label asp-for="Input.ConfirmPassword" class="kos-label"></label>
+                    <input asp-for="Input.ConfirmPassword" class="kos-input" autocomplete="new-password" />
+                    <span asp-validation-for="Input.ConfirmPassword" class="kos-error"></span>
+                </div>
+            </div>
+
+            <button type="submit" class="kos-btn kos-btn-primary kos-mt">Sign Up</button>
+            <p class="kos-meta kos-mt">Already have an account? <a asp-page="/Account/Login">Log in</a></p>
+        </form>
+    </div>
+</div>
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

@@ -1,0 +1,85 @@
+@model Player
+<div class="kos-field">
+    <label asp-for="FullName" class="kos-label"></label>
+    <input asp-for="FullName" class="kos-input" placeholder="LeBron James" />
+    <span asp-validation-for="FullName" class="kos-error"></span>
+</div>
+
+<div class="kos-grid kos-grid-3">
+    <div class="kos-field">
+        <label asp-for="Age" class="kos-label"></label>
+        <input asp-for="Age" class="kos-input" value="25" />
+        <span asp-validation-for="Age" class="kos-error"></span>
+    </div>
+    <div class="kos-field">
+        <label asp-for="Height" class="kos-label">Height (cm)</label>
+        <input asp-for="Height" class="kos-input" value="190" />
+        <span asp-validation-for="Height" class="kos-error"></span>
+    </div>
+    <div class="kos-field">
+        <label asp-for="Position" class="kos-label"></label>
+        <input asp-for="Position" class="kos-input" placeholder="Guard" />
+        <span asp-validation-for="Position" class="kos-error"></span>
+    </div>
+</div>
+
+<div class="kos-field">
+    <label asp-for="TeamId" class="kos-label">Team</label>
+    <select asp-for="TeamId" asp-items="ViewBag.Teams" class="kos-input">
+        <option value="">— Free Agent —</option>
+    </select>
+    <span asp-validation-for="TeamId" class="kos-error"></span>
+</div>
+
+<h3 class="kos-subhead">Shooting Percentages (0–100)</h3>
+<div class="kos-grid kos-grid-2">
+    <div class="kos-field">
+        <label asp-for="ThreePointPercentage" class="kos-label">Three Point %</label>
+        <input asp-for="ThreePointPercentage" class="kos-input" value="35" />
+        <span asp-validation-for="ThreePointPercentage" class="kos-error"></span>
+    </div>
+    <div class="kos-field">
+        <label asp-for="MidRangePercentage" class="kos-label">Mid Range %</label>
+        <input asp-for="MidRangePercentage" class="kos-input" value="45" />
+        <span asp-validation-for="MidRangePercentage" class="kos-error"></span>
+    </div>
+    <div class="kos-field">
+        <label asp-for="FreeThrowPercentage" class="kos-label">Free Throw %</label>
+        <input asp-for="FreeThrowPercentage" class="kos-input" value="75" />
+        <span asp-validation-for="FreeThrowPercentage" class="kos-error"></span>
+    </div>
+    <div class="kos-field">
+        <label asp-for="PaintScoringPercentage" class="kos-label">Paint Scoring %</label>
+        <input asp-for="PaintScoringPercentage" class="kos-input" value="55" />
+        <span asp-validation-for="PaintScoringPercentage" class="kos-error"></span>
+    </div>
+</div>
+
+<h3 class="kos-subhead">Skill Ratings (0–100)</h3>
+<div class="kos-grid kos-grid-3">
+    <div class="kos-field">
+        <label asp-for="DefenseRating" class="kos-label">Defense</label>
+        <input asp-for="DefenseRating" class="kos-input" value="60" />
+        <span asp-validation-for="DefenseRating" class="kos-error"></span>
+    </div>
+    <div class="kos-field">
+        <label asp-for="ReboundingRating" class="kos-label">Rebounding</label>
+        <input asp-for="ReboundingRating" class="kos-input" value="60" />
+        <span asp-validation-for="ReboundingRating" class="kos-error"></span>
+    </div>
+    <div class="kos-field">
+        <label asp-for="PassingRating" class="kos-label">Passing</label>
+        <input asp-for="PassingRating" class="kos-input" value="60" />
+        <span asp-validation-for="PassingRating" class="kos-error"></span>
+    </div>
+    <div class="kos-field">
+        <label asp-for="SpeedRating" class="kos-label">Speed</label>
+        <input asp-for="SpeedRating" class="kos-input" value="65" />
+        <span asp-validation-for="SpeedRating" class="kos-error"></span>
+    </div>
+    <div class="kos-field">
+        <label asp-for="StaminaRating" class="kos-label">Stamina</label>
+        <input asp-for="StaminaRating" class="kos-input" value="70" />
+        <span asp-validation-for="StaminaRating" class="kos-error"></span>
+    </div>
+</div>

@@ -1,0 +1,58 @@
+@model Tournament
+@{ ViewData["Title"] = Model.Name; }
+<section class="kos-hero"><div class="kos-hero-inner" style="padding:60px 24px;">
+    <span class="kos-hero-badge">@Model.Status</span>
+    <h1 style="font-size:clamp(2.2rem,5vw,3.6rem);">@Model.Name</h1>
+    <p>📍 @Model.Location &nbsp;•&nbsp; @Model.StartDate.ToString("MMM dd") – @Model.EndDate.ToString("MMM dd, yyyy")</p>
+</div></section>
+
+<div class="kos-container">
+    <div class="kos-grid" style="grid-template-columns: 2fr 1fr;">
+        <div>
+            <h2 class="kos-section-title" style="font-size:1.5rem;">Overview</h2>
+            <div class="kos-card"><div class="kos-card-body"><p>@Model.Description</p></div></div>
+
+            <div class="kos-between kos-mt">
+                <h2 class="kos-section-title" style="font-size:1.5rem;">Live Scores</h2>
+                <a class="kos-btn kos-btn-dark kos-btn-sm" asp-controller="Match" asp-action="Schedule" asp-route-tournamentId="@Model.Id">Full schedule</a>
+            </div>
+            <div id="liveScores" class="kos-grid" style="gap:14px;"></div>
+
+            <h2 class="kos-section-title kos-mt" style="font-size:1.5rem;">Bracket</h2>
+            <div id="bracket" class="kos-bracket"></div>
+        </div>
+
+        <div>
+            <h2 class="kos-section-title" style="font-size:1.5rem;">Registered Teams</h2>
+            <div class="kos-card"><div class="kos-card-body">
+                @if (Model.Registrations.Any())
+                {
+                    foreach (var r in Model.Registrations)
+                    {
+                        <div class="kos-between" style="padding:8px 0;border-bottom:1px solid var(--kos-line);">
+                            <span>@r.Team?.Name</span>
+                            <span class="kos-pill @(r.IsApproved ? "kos-pill-green" : "kos-pill-gray")">@(r.IsApproved ? "Approved" : "Pending")</span>
+                        </div>
+                    }
+                }
+                else { <p class="kos-meta">No teams registered yet.</p> }
+            </div></div>
+
+            @if (User.IsInRole(DbSeeder.AdminRole))
+            {
+                <form asp-controller="Admin" asp-action="GenerateBracket" method="post" class="kos-mt">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="tournamentId" value="@Model.Id" />
+                    <button type="submit" class="kos-btn kos-btn-primary" style="width:100%;">Generate Bracket</button>
+                </form>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        startLiveScores(@Model.Id, 'liveScores');
+        loadBracket(@Model.Id, 'bracket');
+    </script>
+}

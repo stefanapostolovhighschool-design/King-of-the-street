@@ -1,0 +1,10 @@
+@{
+    ViewData["Title"] = "Error " + ViewData["Code"];
+    Layout = "_Layout";
+}
+<div class="kos-container" style="text-align:center; padding:90px 24px;">
+    <div style="font-family:'Anton',sans-serif; font-size:7rem; color:var(--kos-orange); line-height:1;">@ViewData["Code"]</div>
+    <h1 class="kos-section-title">Out of Bounds</h1>
+    <p class="kos-section-sub">@ViewData["Message"]</p>
+    <a class="kos-btn kos-btn-primary" asp-controller="Home" asp-action="Index">Back to Home Court</a>
+</div>

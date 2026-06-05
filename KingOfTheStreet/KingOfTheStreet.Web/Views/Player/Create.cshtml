@@ -1,0 +1,18 @@
+@model Player
+@{ ViewData["Title"] = "New Player"; }
+<div class="kos-container kos-narrow">
+    <h1 class="kos-section-title">New Player</h1>
+    <p class="kos-section-sub">Define the baller's attributes — they drive the match simulation.</p>
+
+    <div class="kos-card kos-pad">
+        <form asp-action="Create" method="post">
+            <div asp-validation-summary="ModelOnly" class="kos-validation"></div>
+            <partial name="_PlayerForm" model="Model" />
+            <div class="kos-flex kos-mt">
+                <button type="submit" class="kos-btn kos-btn-primary">Create Player</button>
+                <a class="kos-btn kos-btn-outline" asp-action="Index">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

@@ -1,0 +1,30 @@
+@model Team
+@{ ViewData["Title"] = "Create Team"; }
+<div class="kos-container kos-narrow">
+    <h1 class="kos-section-title">Create Your Team</h1>
+    <p class="kos-section-sub">You'll be the captain. An admin approves before you can compete.</p>
+
+    <div class="kos-card kos-pad">
+        <form asp-action="Create" method="post">
+            <div asp-validation-summary="ModelOnly" class="kos-validation"></div>
+
+            <div class="kos-field">
+                <label asp-for="Name" class="kos-label"></label>
+                <input asp-for="Name" class="kos-input" placeholder="Court Generals" />
+                <span asp-validation-for="Name" class="kos-error"></span>
+            </div>
+
+            <div class="kos-field">
+                <label asp-for="LogoUrl" class="kos-label">Logo URL (optional)</label>
+                <input asp-for="LogoUrl" class="kos-input" placeholder="https://..." />
+                <span asp-validation-for="LogoUrl" class="kos-error"></span>
+            </div>
+
+            <div class="kos-flex kos-mt">
+                <button type="submit" class="kos-btn kos-btn-primary">Create Team</button>
+                <a class="kos-btn kos-btn-outline" asp-action="Index">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

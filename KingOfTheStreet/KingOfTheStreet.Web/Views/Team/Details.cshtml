@@ -1,0 +1,66 @@
+@model Team
+@{
+    ViewData["Title"] = Model.Name;
+    var rating = ViewData["TeamRating"] is double r ? r : 0;
+    var players = (Model.Players ?? new List<Player>()).OrderByDescending(p => p.OverallRating).ToList();
+}
+<div class="kos-container">
+    <div class="kos-team-banner">
+        <div class="kos-team-logo kos-team-logo-lg">@(string.IsNullOrEmpty(Model.Name) ? "?" : Model.Name.Substring(0,1))</div>
+        <div>
+            <h1 class="kos-section-title" style="margin:0">@Model.Name</h1>
+            <span class="kos-pill @(Model.IsApproved ? "kos-pill-green" : "kos-pill-gray")">
+                @(Model.IsApproved ? "Approved" : "Pending Approval")
+            </span>
+        </div>
+        <div class="kos-team-rating">
+            <span class="kos-rating-number">@rating.ToString("0.0")</span>
+            <span class="kos-rating-label">TEAM RATING</span>
+        </div>
+    </div>
+
+    <div class="kos-flex kos-mt">
+        @if (SignInManager.IsSignedIn(User))
+        {
+            <a class="kos-btn kos-btn-outline kos-btn-sm" asp-action="Edit" asp-route-id="@Model.Id">Edit Team</a>
+            <a class="kos-btn kos-btn-primary kos-btn-sm" asp-controller="Player" asp-action="Create">+ Add Player</a>
+        }
+        @if (User.IsInRole(DbSeeder.AdminRole) && !Model.IsApproved)
+        {
+            <form asp-controller="Admin" asp-action="ApproveTeam" method="post" style="display:inline">
+                <input type="hidden" name="id" value="@Model.Id" />
+                <button type="submit" class="kos-btn kos-btn-primary kos-btn-sm">Approve Team</button>
+            </form>
+        }
+    </div>
+
+    <h2 class="kos-subhead">Roster (@players.Count)</h2>
+    @if (players.Any())
+    {
+        <div class="kos-grid kos-grid-2">
+            @foreach (var p in players)
+            {
+                <div class="kos-card kos-pad">
+                    <div class="kos-between">
+                        <div>
+                            <h3 class="kos-card-title">@p.FullName</h3>
+                            <p class="kos-meta">@p.Position • @p.Height cm • Age @p.Age</p>
+                        </div>
+                        <span class="kos-rating-badge">@p.OverallRating.ToString("0.0")</span>
+                    </div>
+                    <div class="kos-mt">
+                        @await Html.PartialAsync("_AttributeBar", ("3PT", p.ThreePointPercentage))
+                        @await Html.PartialAsync("_AttributeBar", ("Mid", p.MidRangePercentage))
+                        @await Html.PartialAsync("_AttributeBar", ("Paint", p.PaintScoringPercentage))
+                        @await Html.PartialAsync("_AttributeBar", ("DEF", p.DefenseRating))
+                        @await Html.PartialAsync("_AttributeBar", ("REB", p.ReboundingRating))
+                    </div>
+                    <a class="kos-btn kos-btn-outline kos-btn-sm kos-mt" asp-controller="Player" asp-action="Details" asp-route-id="@p.Id">Full Profile</a>
+                </div>
+            }
+        </div>
+    }
+    else { <div class="kos-empty">No players on this roster yet.</div> }
+
+    <a class="kos-btn kos-btn-outline kos-mt" asp-action="Index">← Back to Teams</a>
+</div>

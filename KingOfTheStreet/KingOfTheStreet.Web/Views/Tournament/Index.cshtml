@@ -1,0 +1,44 @@
+@model IEnumerable<Tournament>
+@{ ViewData["Title"] = "Tournaments"; }
+<div class="kos-container">
+    <div class="kos-between">
+        <div>
+            <h1 class="kos-section-title">Tournaments</h1>
+            <p class="kos-section-sub">Every battle for the crown.</p>
+        </div>
+        @if (User.IsInRole(DbSeeder.AdminRole))
+        {
+            <a class="kos-btn kos-btn-primary" asp-action="Create">+ New Tournament</a>
+        }
+    </div>
+
+    @if (Model.Any())
+    {
+        <div class="kos-grid kos-grid-3">
+            @foreach (var t in Model)
+            {
+                <div class="kos-card">
+                    <div class="kos-card-head">
+                        <span class="kos-pill kos-pill-orange">@t.Status</span>
+                        <span>@t.StartDate.ToString("MMM dd, yyyy")</span>
+                    </div>
+                    <div class="kos-card-body">
+                        <h3 class="kos-card-title">@t.Name</h3>
+                        <p class="kos-meta">📍 @t.Location</p>
+                        <p class="kos-meta">🏀 Max @t.MaxTeams teams</p>
+                        <p style="color:var(--kos-gray); font-size:.92rem;">@(t.Description.Length > 90 ? t.Description.Substring(0,90) + "…" : t.Description)</p>
+                        <div class="kos-flex kos-mt">
+                            <a class="kos-btn kos-btn-primary kos-btn-sm" asp-action="Details" asp-route-id="@t.Id">Details</a>
+                            @if (User.IsInRole(DbSeeder.AdminRole))
+                            {
+                                <a class="kos-btn kos-btn-outline kos-btn-sm" style="color:var(--kos-ink);border-color:var(--kos-line);" asp-action="Edit" asp-route-id="@t.Id">Edit</a>
+                                <a class="kos-btn kos-btn-outline kos-btn-sm" style="color:#dc2626;border-color:#f3c0c0;" asp-action="Delete" asp-route-id="@t.Id">Delete</a>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else { <div class="kos-empty">No tournaments yet.</div> }
+</div>

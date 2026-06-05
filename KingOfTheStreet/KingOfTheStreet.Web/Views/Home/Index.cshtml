@@ -1,0 +1,108 @@
+@model HomeViewModel
+@{
+    ViewData["Title"] = "Home";
+}
+
+<section class="kos-hero">
+    <div class="kos-hero-inner">
+        <span class="kos-hero-badge">3v3 STREET BASKETBALL</span>
+        <h1>Own The <span>Concrete.</span><br />Become King Of The Street.</h1>
+        <p>Create your crew, register for tournaments, and battle for the crown on the toughest courts in the country. Live scores, brackets, and MVP voting in real time.</p>
+        <div class="kos-hero-cta">
+            <a class="kos-btn kos-btn-primary" asp-controller="Tournament" asp-action="Index">Browse Tournaments</a>
+            <a class="kos-btn kos-btn-outline" asp-controller="Team" asp-action="Create">Create Your Team</a>
+        </div>
+
+        <div class="kos-stats-grid">
+            <div class="kos-stat-card"><div class="kos-stat-value">@Model.Stats.TotalTournaments</div><div class="kos-stat-label">Tournaments</div></div>
+            <div class="kos-stat-card"><div class="kos-stat-value">@Model.Stats.TotalTeams</div><div class="kos-stat-label">Teams</div></div>
+            <div class="kos-stat-card"><div class="kos-stat-value">@Model.Stats.TotalPlayers</div><div class="kos-stat-label">Players</div></div>
+            <div class="kos-stat-card"><div class="kos-stat-value">@Model.Stats.UpcomingMatches</div><div class="kos-stat-label">Upcoming Matches</div></div>
+        </div>
+    </div>
+</section>
+
+<div class="kos-container">
+    <div class="kos-between">
+        <div>
+            <h2 class="kos-section-title">Upcoming Tournaments</h2>
+            <p class="kos-section-sub">Lock in your spot before registration closes.</p>
+        </div>
+        <a class="kos-btn kos-btn-dark kos-btn-sm" asp-controller="Tournament" asp-action="Index">View all</a>
+    </div>
+
+    @if (Model.UpcomingTournaments.Any())
+    {
+        <div class="kos-grid kos-grid-3">
+            @foreach (var t in Model.UpcomingTournaments)
+            {
+                <div class="kos-card">
+                    <div class="kos-card-head">
+                        <span class="kos-pill kos-pill-orange">@t.Status</span>
+                        <span>@t.StartDate.ToString("MMM dd")</span>
+                    </div>
+                    <div class="kos-card-body">
+                        <h3 class="kos-card-title">@t.Name</h3>
+                        <p class="kos-meta">📍 @t.Location</p>
+                        <p class="kos-meta">🏀 Max @t.MaxTeams teams</p>
+                        <a class="kos-btn kos-btn-primary kos-btn-sm kos-mt" asp-controller="Tournament" asp-action="Details" asp-route-id="@t.Id">Details</a>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="kos-empty">No upcoming tournaments scheduled yet.</div>
+    }
+
+    <div class="kos-between kos-mt">
+        <div>
+            <h2 class="kos-section-title">Top Teams</h2>
+            <p class="kos-section-sub">Ranked by average rating of their top 5 players.</p>
+        </div>
+    </div>
+    <div class="kos-grid kos-grid-4">
+        @foreach (var team in Model.TopTeams)
+        {
+            <div class="kos-card">
+                <div class="kos-card-body kos-flex">
+                    <div class="kos-logo">@(team.Name.Length > 0 ? team.Name.Substring(0,1) : "?")</div>
+                    <div>
+                        <h3 class="kos-card-title" style="font-size:1.1rem">@team.Name</h3>
+                        <p class="kos-meta">@(team.Players?.Count ?? 0) players</p>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="kos-mt">
+        <h2 class="kos-section-title">Top Scorers</h2>
+        <p class="kos-section-sub">Leading the league in total points.</p>
+        @if (Model.TopScorers.Any())
+        {
+            <table class="kos-table">
+                <thead><tr><th>#</th><th>Player</th><th>Team</th><th>Points</th><th>Games</th></tr></thead>
+                <tbody>
+                    @{ int rank = 1; }
+                    @foreach (var s in Model.TopScorers)
+                    {
+                        <tr>
+                            <td class="kos-rank">@rank</td>
+                            <td>@s.PlayerName</td>
+                            <td>@s.TeamName</td>
+                            <td><strong>@s.Value</strong></td>
+                            <td>@s.GamesPlayed</td>
+                        </tr>
+                        rank++;
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <div class="kos-empty">No games have been played yet. Admins can simulate matches to populate stats.</div>
+        }
+    </div>
+</div>

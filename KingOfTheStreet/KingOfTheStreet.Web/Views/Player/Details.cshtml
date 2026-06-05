@@ -1,0 +1,64 @@
+@model Player
+@{ ViewData["Title"] = Model.FullName; }
+<div class="kos-container kos-narrow">
+    <div class="kos-player-banner">
+        <div class="kos-player-avatar">@(string.IsNullOrEmpty(Model.FullName) ? "?" : Model.FullName.Substring(0,1))</div>
+        <div style="flex:1">
+            <h1 class="kos-section-title" style="margin:0">@Model.FullName</h1>
+            <p class="kos-section-sub" style="margin:4px 0 0">
+                @Model.Position • @Model.Height cm • Age @Model.Age •
+                @if (Model.Team != null)
+                {
+                    <a asp-controller="Team" asp-action="Details" asp-route-id="@Model.TeamId">@Model.Team.Name</a>
+                }
+                else { <span>Free Agent</span> }
+            </p>
+        </div>
+        <div class="kos-team-rating">
+            <span class="kos-rating-number">@Model.OverallRating.ToString("0.0")</span>
+            <span class="kos-rating-label">OVERALL</span>
+        </div>
+    </div>
+
+    <h2 class="kos-subhead">Shooting</h2>
+    <div class="kos-card kos-pad">
+        @await Html.PartialAsync("_AttributeBar", ("Three Point %", Model.ThreePointPercentage))
+        @await Html.PartialAsync("_AttributeBar", ("Mid Range %", Model.MidRangePercentage))
+        @await Html.PartialAsync("_AttributeBar", ("Free Throw %", Model.FreeThrowPercentage))
+        @await Html.PartialAsync("_AttributeBar", ("Paint Scoring %", Model.PaintScoringPercentage))
+    </div>
+
+    <h2 class="kos-subhead">Physical & Skill</h2>
+    <div class="kos-card kos-pad">
+        @await Html.PartialAsync("_AttributeBar", ("Defense", Model.DefenseRating))
+        @await Html.PartialAsync("_AttributeBar", ("Rebounding", Model.ReboundingRating))
+        @await Html.PartialAsync("_AttributeBar", ("Passing", Model.PassingRating))
+        @await Html.PartialAsync("_AttributeBar", ("Speed", Model.SpeedRating))
+        @await Html.PartialAsync("_AttributeBar", ("Stamina", Model.StaminaRating))
+    </div>
+
+    @if (SignInManager.IsSignedIn(User))
+    {
+        <div class="kos-card kos-pad kos-mt">
+            <h3 class="kos-card-title">Vote this player MVP</h3>
+            <p class="kos-meta">Pick a tournament and cast your vote (one per tournament).</p>
+            @Html.AntiForgeryToken()
+            <div class="kos-flex">
+                <input id="mvpTournamentId" class="kos-input" type="number" placeholder="Tournament ID" style="max-width:160px" />
+                <button class="kos-btn kos-btn-primary"
+                        onclick="voteMvp(parseInt(document.getElementById('mvpTournamentId').value), @Model.Id, this)">
+                    Vote MVP (<span id="voteCount-@Model.Id">0</span>)
+                </button>
+            </div>
+            <p id="voteMsg" class="kos-vote-msg" style="display:none"></p>
+        </div>
+    }
+
+    <div class="kos-flex kos-mt">
+        @if (SignInManager.IsSignedIn(User))
+        {
+            <a class="kos-btn kos-btn-outline kos-btn-sm" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
+        }
+        <a class="kos-btn kos-btn-outline kos-btn-sm" asp-action="Index">← All Players</a>
+    </div>
+</div>

@@ -1,0 +1,20 @@
+@model Player
+@{ ViewData["Title"] = "Delete Player"; }
+<div class="kos-container kos-narrow">
+    <h1 class="kos-section-title">Delete Player</h1>
+    <div class="kos-card kos-pad">
+        <p class="kos-danger-note">⚠️ Are you sure you want to permanently delete this player?</p>
+        <div class="kos-summary">
+            <div><span>Name</span><strong>@Model.FullName</strong></div>
+            <div><span>Position</span><strong>@Model.Position</strong></div>
+            <div><span>Overall</span><strong>@Model.OverallRating.ToString("0.0")</strong></div>
+        </div>
+        <form asp-action="Delete" method="post" class="kos-mt">
+            <input type="hidden" asp-for="Id" />
+            <div class="kos-flex">
+                <button type="submit" class="kos-btn kos-btn-danger">Yes, Delete</button>
+                <a class="kos-btn kos-btn-outline" asp-action="Index">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>

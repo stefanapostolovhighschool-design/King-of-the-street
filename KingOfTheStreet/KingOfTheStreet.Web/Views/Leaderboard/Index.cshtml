@@ -1,0 +1,41 @@
+@model LeaderboardViewModel
+@{ ViewData["Title"] = "Leaderboards"; }
+<div class="kos-container">
+    <h1 class="kos-section-title">Leaderboards</h1>
+    <p class="kos-section-sub">Who runs the street.</p>
+
+    <div class="kos-tabs" id="lbTabs">
+        <button class="kos-tab active" data-tab="scorers">Top Scorers</button>
+        <button class="kos-tab" data-tab="rebounders">Rebounders</button>
+        <button class="kos-tab" data-tab="assists">Assists</button>
+        <button class="kos-tab" data-tab="defenders">Defenders</button>
+    </div>
+
+    <div class="kos-tab-panel active" data-panel="scorers">
+        @await Html.PartialAsync("_LeaderTable", (Model.TopScorers, "PPG"))
+    </div>
+    <div class="kos-tab-panel" data-panel="rebounders">
+        @await Html.PartialAsync("_LeaderTable", (Model.TopRebounders, "RPG"))
+    </div>
+    <div class="kos-tab-panel" data-panel="assists">
+        @await Html.PartialAsync("_LeaderTable", (Model.TopAssists, "APG"))
+    </div>
+    <div class="kos-tab-panel" data-panel="defenders">
+        @await Html.PartialAsync("_LeaderTable", (Model.BestDefenders, "DEF"))
+    </div>
+</div>
+
+@section Scripts {
+<script>
+    document.querySelectorAll('#lbTabs .kos-tab').forEach(function (tab) {
+        tab.addEventListener('click', function () {
+            var name = tab.getAttribute('data-tab');
+            document.querySelectorAll('#lbTabs .kos-tab').forEach(function (t) { t.classList.remove('active'); });
+            tab.classList.add('active');
+            document.querySelectorAll('.kos-tab-panel').forEach(function (p) {
+                p.classList.toggle('active', p.getAttribute('data-panel') === name);
+            });
+        });
+    });
+</script>
+}

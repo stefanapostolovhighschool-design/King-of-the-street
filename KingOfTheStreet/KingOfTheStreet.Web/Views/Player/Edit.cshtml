@@ -1,0 +1,19 @@
+@model Player
+@{ ViewData["Title"] = "Edit Player"; }
+<div class="kos-container kos-narrow">
+    <h1 class="kos-section-title">Edit Player</h1>
+    <p class="kos-section-sub">@Model.FullName</p>
+
+    <div class="kos-card kos-pad">
+        <form asp-action="Edit" method="post">
+            <div asp-validation-summary="ModelOnly" class="kos-validation"></div>
+            <input type="hidden" asp-for="Id" />
+            <partial name="_PlayerForm" model="Model" />
+            <div class="kos-flex kos-mt">
+                <button type="submit" class="kos-btn kos-btn-primary">Save Changes</button>
+                <a class="kos-btn kos-btn-outline" asp-action="Details" asp-route-id="@Model.Id">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

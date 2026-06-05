@@ -1,0 +1,21 @@
+@model Tournament
+@{ ViewData["Title"] = "Delete Tournament"; }
+<div class="kos-container kos-narrow">
+    <h1 class="kos-section-title">Delete Tournament</h1>
+    <div class="kos-card kos-pad">
+        <p class="kos-danger-note">⚠️ Are you sure you want to permanently delete this tournament? This also removes its matches.</p>
+        <div class="kos-summary">
+            <div><span>Name</span><strong>@Model.Name</strong></div>
+            <div><span>Location</span><strong>@Model.Location</strong></div>
+            <div><span>Status</span><strong>@Model.Status</strong></div>
+            <div><span>Dates</span><strong>@Model.StartDate.ToString("MMM dd") – @Model.EndDate.ToString("MMM dd, yyyy")</strong></div>
+        </div>
+        <form asp-action="Delete" method="post" class="kos-mt">
+            <input type="hidden" asp-for="Id" />
+            <div class="kos-flex">
+                <button type="submit" class="kos-btn kos-btn-danger">Yes, Delete</button>
+                <a class="kos-btn kos-btn-outline" asp-action="Index">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>

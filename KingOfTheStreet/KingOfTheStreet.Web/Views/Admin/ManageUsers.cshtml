@@ -1,0 +1,31 @@
+@model List<ApplicationUser>
+@{ ViewData["Title"] = "Manage Users"; }
+<div class="kos-container">
+    <div class="kos-between">
+        <div>
+            <h1 class="kos-section-title">Manage Users</h1>
+            <p class="kos-section-sub">@Model.Count registered accounts.</p>
+        </div>
+        <a class="kos-btn kos-btn-outline" asp-action="Dashboard">← Dashboard</a>
+    </div>
+
+    <div class="kos-card kos-pad">
+        <div class="kos-table-wrap">
+            <table class="kos-table">
+                <thead>
+                    <tr><th>Name</th><th>Email</th><th>Registered</th></tr>
+                </thead>
+                <tbody>
+                @foreach (var u in Model)
+                {
+                    <tr>
+                        <td>@u.FirstName @u.LastName</td>
+                        <td>@u.Email</td>
+                        <td>@u.RegistrationDate.ToString("MMM dd, yyyy")</td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

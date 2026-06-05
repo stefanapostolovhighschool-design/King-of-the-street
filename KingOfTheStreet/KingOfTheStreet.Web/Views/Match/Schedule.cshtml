@@ -1,0 +1,50 @@
+@model IEnumerable<Match>
+@{
+    ViewData["Title"] = "Schedule";
+    var tournamentId = ViewData["TournamentId"];
+    var rounds = Model.GroupBy(m => m.Round).OrderBy(g => g.Key);
+}
+<div class="kos-container">
+    <div class="kos-between">
+        <div>
+            <h1 class="kos-section-title">Match Schedule</h1>
+            <p class="kos-section-sub">All fixtures for this tournament.</p>
+        </div>
+        <a class="kos-btn kos-btn-outline" asp-controller="Tournament" asp-action="Details" asp-route-id="@tournamentId">← Tournament</a>
+    </div>
+
+    @if (Model.Any())
+    {
+        @foreach (var round in rounds)
+        {
+            <h2 class="kos-subhead">Round @round.Key</h2>
+            <div class="kos-grid kos-grid-2">
+                @foreach (var m in round)
+                {
+                    <div class="kos-card kos-pad">
+                        <div class="kos-between">
+                            <span class="kos-meta">@m.MatchDate.ToString("MMM dd, HH:mm")</span>
+                            <span class="kos-pill @(m.Status == MatchStatus.Live ? "kos-pill-live" : m.Status == MatchStatus.Finished ? "kos-pill-green" : "kos-pill-gray")">@m.Status</span>
+                        </div>
+                        <div class="kos-match-row kos-mt">
+                            <strong>@(m.TeamA?.Name ?? "TBD")</strong>
+                            <span class="kos-rating-badge">@m.ScoreA : @m.ScoreB</span>
+                            <strong>@(m.TeamB?.Name ?? "TBD")</strong>
+                        </div>
+                        <div class="kos-flex kos-mt">
+                            <a class="kos-btn kos-btn-primary kos-btn-sm" asp-action="Details" asp-route-id="@m.Id">Details</a>
+                            @if (User.IsInRole(DbSeeder.AdminRole))
+                            {
+                                <a class="kos-btn kos-btn-outline kos-btn-sm" asp-action="EnterResult" asp-route-id="@m.Id">Enter Result</a>
+                                <form asp-action="Simulate" asp-route-id="@m.Id" method="post" style="display:inline">
+                                    <button type="submit" class="kos-btn kos-btn-outline kos-btn-sm">⚡ Simulate</button>
+                                </form>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    }
+    else { <div class="kos-empty">No matches scheduled. An admin can generate the bracket.</div> }
+</div>

@@ -1,0 +1,57 @@
+@model IEnumerable<Team>
+@{ ViewData["Title"] = "Teams"; }
+<div class="kos-container">
+    <div class="kos-between">
+        <div>
+            <h1 class="kos-section-title">Teams</h1>
+            <p class="kos-section-sub">The squads chasing the crown.</p>
+        </div>
+        @if (SignInManager.IsSignedIn(User))
+        {
+            <a class="kos-btn kos-btn-primary" asp-action="Create">+ New Team</a>
+        }
+    </div>
+
+    <div class="kos-searchbar">
+        <input id="teamSearch" class="kos-input" placeholder="🔍 Search teams by name..." autocomplete="off" />
+    </div>
+
+    <div id="teamResults" class="kos-grid kos-grid-3">
+        @foreach (var t in Model)
+        {
+            <div class="kos-card">
+                <div class="kos-card-body">
+                    <div class="kos-team-head">
+                        <div class="kos-team-logo">@(string.IsNullOrEmpty(t.Name) ? "?" : t.Name.Substring(0,1))</div>
+                        <div>
+                            <h3 class="kos-card-title">@t.Name</h3>
+                            <span class="kos-pill @(t.IsApproved ? "kos-pill-green" : "kos-pill-gray")">
+                                @(t.IsApproved ? "Approved" : "Pending")
+                            </span>
+                        </div>
+                    </div>
+                    <p class="kos-meta">👥 @(t.Players?.Count ?? 0) players</p>
+                    <a class="kos-btn kos-btn-primary kos-btn-sm kos-mt" asp-action="Details" asp-route-id="@t.Id">View Team</a>
+                </div>
+            </div>
+        }
+    </div>
+    <div id="teamEmpty" class="kos-empty" style="display:none;">No teams match your search.</div>
+</div>
+
+@section Scripts {
+<script>
+    document.getElementById('teamEmpty').style.display = 'none';
+    liveSearch('teamSearch', '/Team/SearchJson', 'teamResults', function (t) {
+        return '<div class="kos-card"><div class="kos-card-body">' +
+            '<div class="kos-team-head">' +
+            '<div class="kos-team-logo">' + (t.name || '?').charAt(0) + '</div>' +
+            '<div><h3 class="kos-card-title">' + t.name + '</h3>' +
+            '<span class="kos-pill kos-pill-orange">Rating ' + (Math.round(t.rating * 10) / 10) + '</span></div>' +
+            '</div>' +
+            '<p class="kos-meta">👥 ' + t.players + ' players</p>' +
+            '<a class="kos-btn kos-btn-primary kos-btn-sm kos-mt" href="/Team/Details/' + t.id + '">View Team</a>' +
+            '</div></div>';
+    });
+</script>
+}

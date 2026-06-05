@@ -1,0 +1,15 @@
+@model ErrorViewModel
+@{
+    ViewData["Title"] = "Error";
+    Layout = "_Layout";
+}
+<div class="kos-container" style="text-align:center; padding:90px 24px;">
+    <div style="font-family:'Anton',sans-serif; font-size:7rem; color:var(--kos-orange); line-height:1;">500</div>
+    <h1 class="kos-section-title">Something Went Wrong</h1>
+    <p class="kos-section-sub">An internal error occurred on our court. Please try again.</p>
+    @if (Model.ShowRequestId)
+    {
+        <p class="kos-meta" style="justify-content:center;">Request ID: <code>@Model.RequestId</code></p>
+    }
+    <a class="kos-btn kos-btn-primary" asp-controller="Home" asp-action="Index">Back to Home Court</a>
+</div>

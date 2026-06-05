@@ -1,0 +1,29 @@
+@model (string TeamName, List<KingOfTheStreet.Data.Models.PlayerMatchStat> Stats)
+<div class="kos-card kos-pad">
+    <h3 class="kos-card-title">@Model.TeamName</h3>
+    <div class="kos-table-wrap">
+        <table class="kos-table">
+            <thead>
+                <tr><th>Player</th><th>PTS</th><th>REB</th><th>AST</th><th>STL</th><th>BLK</th><th>FG</th></tr>
+            </thead>
+            <tbody>
+            @foreach (var s in Model.Stats)
+            {
+                <tr>
+                    <td>@(s.Player?.FullName ?? ("#" + s.PlayerId))</td>
+                    <td><strong>@s.Points</strong></td>
+                    <td>@s.Rebounds</td>
+                    <td>@s.Assists</td>
+                    <td>@s.Steals</td>
+                    <td>@s.Blocks</td>
+                    <td>@s.FieldGoalsMade/@s.FieldGoalsAttempted</td>
+                </tr>
+            }
+            @if (!Model.Stats.Any())
+            {
+                <tr><td colspan="7" style="text-align:center;color:#9ca3af">No stats</td></tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>

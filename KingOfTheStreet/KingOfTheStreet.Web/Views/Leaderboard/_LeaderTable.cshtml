@@ -1,0 +1,28 @@
+@model (List<KingOfTheStreet.Services.Models.LeaderRow> Rows, string Unit)
+<div class="kos-card kos-pad">
+    <div class="kos-table-wrap">
+        <table class="kos-table">
+            <thead>
+                <tr><th>#</th><th>Player</th><th>Team</th><th>GP</th><th>@Model.Unit</th></tr>
+            </thead>
+            <tbody>
+            @{ var rank = 1; }
+            @foreach (var row in Model.Rows)
+            {
+                <tr>
+                    <td><span class="kos-rank @(rank <= 3 ? "kos-rank-top" : "")">@rank</span></td>
+                    <td>@row.PlayerName</td>
+                    <td class="kos-meta">@row.TeamName</td>
+                    <td>@row.GamesPlayed</td>
+                    <td><strong>@row.Value.ToString("0.0")</strong></td>
+                </tr>
+                rank++;
+            }
+            @if (!Model.Rows.Any())
+            {
+                <tr><td colspan="5" style="text-align:center;color:#9ca3af">No data yet — simulate some matches first.</td></tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>

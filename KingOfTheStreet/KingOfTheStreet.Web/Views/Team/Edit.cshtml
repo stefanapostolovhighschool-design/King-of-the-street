@@ -1,0 +1,32 @@
+@model Team
+@{ ViewData["Title"] = "Edit Team"; }
+<div class="kos-container kos-narrow">
+    <h1 class="kos-section-title">Edit Team</h1>
+    <div class="kos-card kos-pad">
+        <form asp-action="Edit" method="post">
+            <div asp-validation-summary="ModelOnly" class="kos-validation"></div>
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="CaptainId" />
+            <input type="hidden" asp-for="IsApproved" />
+            <input type="hidden" asp-for="CreatedOn" />
+
+            <div class="kos-field">
+                <label asp-for="Name" class="kos-label"></label>
+                <input asp-for="Name" class="kos-input" />
+                <span asp-validation-for="Name" class="kos-error"></span>
+            </div>
+
+            <div class="kos-field">
+                <label asp-for="LogoUrl" class="kos-label">Logo URL (optional)</label>
+                <input asp-for="LogoUrl" class="kos-input" />
+                <span asp-validation-for="LogoUrl" class="kos-error"></span>
+            </div>
+
+            <div class="kos-flex kos-mt">
+                <button type="submit" class="kos-btn kos-btn-primary">Save Changes</button>
+                <a class="kos-btn kos-btn-outline" asp-action="Details" asp-route-id="@Model.Id">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

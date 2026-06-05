@@ -1,0 +1,10 @@
+@model (string Label, int Value)
+<div class="kos-attr">
+    <div class="kos-attr-head">
+        <span>@Model.Label</span>
+        <span>@Model.Value</span>
+    </div>
+    <div class="kos-progress">
+        <div class="kos-progress-bar" style="width:@(Model.Value)%"></div>
+    </div>
+</div>

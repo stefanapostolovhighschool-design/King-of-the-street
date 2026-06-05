@@ -1,0 +1,50 @@
+@model IEnumerable<Player>
+@{ ViewData["Title"] = "Players"; }
+<div class="kos-container">
+    <div class="kos-between">
+        <div>
+            <h1 class="kos-section-title">Players</h1>
+            <p class="kos-section-sub">Every baller in the system.</p>
+        </div>
+        @if (SignInManager.IsSignedIn(User))
+        {
+            <a class="kos-btn kos-btn-primary" asp-action="Create">+ New Player</a>
+        }
+    </div>
+
+    <div class="kos-searchbar">
+        <input id="playerSearch" class="kos-input" placeholder="🔍 Search players by name or position..." autocomplete="off" />
+    </div>
+
+    <div id="playerResults" class="kos-grid kos-grid-3">
+        @foreach (var p in Model)
+        {
+            <div class="kos-card kos-pad">
+                <div class="kos-between">
+                    <div>
+                        <h3 class="kos-card-title">@p.FullName</h3>
+                        <p class="kos-meta">@p.Position • @(p.Team?.Name ?? "Free Agent")</p>
+                    </div>
+                    <span class="kos-rating-badge">@p.OverallRating.ToString("0.0")</span>
+                </div>
+                <a class="kos-btn kos-btn-primary kos-btn-sm kos-mt" asp-action="Details" asp-route-id="@p.Id">Profile</a>
+            </div>
+        }
+    </div>
+    <div id="playerEmpty" class="kos-empty" style="display:none;">No players match your search.</div>
+</div>
+
+@section Scripts {
+<script>
+    document.getElementById('playerEmpty').style.display = 'none';
+    liveSearch('playerSearch', '/Player/SearchJson', 'playerResults', function (p) {
+        return '<div class="kos-card kos-pad">' +
+            '<div class="kos-between"><div>' +
+            '<h3 class="kos-card-title">' + p.name + '</h3>' +
+            '<p class="kos-meta">' + p.position + ' • ' + p.team + '</p></div>' +
+            '<span class="kos-rating-badge">' + p.rating + '</span></div>' +
+            '<a class="kos-btn kos-btn-primary kos-btn-sm kos-mt" href="/Player/Details/' + p.id + '">Profile</a>' +
+            '</div>';
+    });
+</script>
+}

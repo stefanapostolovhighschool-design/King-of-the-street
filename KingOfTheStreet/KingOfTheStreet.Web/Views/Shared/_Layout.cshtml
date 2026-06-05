@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - King Of The Street</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    <nav class="kos-nav">
+        <div class="kos-nav-inner">
+            <a class="kos-brand" asp-controller="Home" asp-action="Index">
+                <span class="kos-brand-mark">KOTS</span>
+                <span class="kos-brand-text">King Of The Street</span>
+            </a>
+            <button class="kos-nav-toggle" id="navToggle" aria-label="Menu">&#9776;</button>
+            <ul class="kos-nav-links" id="navLinks">
+                <li><a asp-controller="Home" asp-action="Index">Home</a></li>
+                <li><a asp-controller="Tournament" asp-action="Index">Tournaments</a></li>
+                <li><a asp-controller="Team" asp-action="Index">Teams</a></li>
+                <li><a asp-controller="Player" asp-action="Index">Players</a></li>
+                <li><a asp-controller="Leaderboard" asp-action="Index">Leaderboards</a></li>
+                @if (User.IsInRole(DbSeeder.AdminRole))
+                {
+                    <li><a asp-controller="Admin" asp-action="Dashboard">Dashboard</a></li>
+                }
+                <li><a asp-controller="Home" asp-action="About">About</a></li>
+            </ul>
+            <div class="kos-nav-auth">
+                @if (SignInManager.IsSignedIn(User))
+                {
+                    <span class="kos-user">@User.Identity?.Name</span>
+                    <form class="d-inline" asp-area="Identity" asp-page="/Account/Logout" method="post">
+                        <button type="submit" class="kos-btn kos-btn-outline">Logout</button>
+                    </form>
+                }
+                else
+                {
+                    <a class="kos-btn kos-btn-outline" asp-area="Identity" asp-page="/Account/Login">Login</a>
+                    <a class="kos-btn kos-btn-primary" asp-area="Identity" asp-page="/Account/Register">Sign Up</a>
+                }
+            </div>
+        </div>
+    </nav>
+
+    <main role="main" class="kos-main">
+        @RenderBody()
+    </main>
+
+    <footer class="kos-footer">
+        <div class="kos-footer-inner">
+            <div>
+                <span class="kos-brand-mark">KOTS</span>
+                <p>3v3 Street Basketball Tournament Management</p>
+            </div>
+            <p class="kos-footer-copy">&copy; @DateTime.Now.Year King Of The Street. Built with ASP.NET Core MVC.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
